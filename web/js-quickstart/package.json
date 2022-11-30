@@ -1,0 +1,22 @@
+{
+  "name": "js-quickstart",
+  "version": "1.0.0",
+  "description": "100ms js quickstart",
+  "main": "index.html",
+  "scripts": {
+      "start": "parcel index.html --open",
+      "build": "parcel build index.html"
+  },
+  "dependencies": {
+      "@100mslive/hms-video-store": "0.6.4",
+      "parcel-bundler": "^1.6.1"
+  },
+  "devDependencies": {
+      "@babel/core": "7.2.0"
+  },
+  "resolutions": {
+      "@babel/preset-env": "7.13.8"
+  },
+  "keywords": [],
+  "author": "100ms inc"
+}

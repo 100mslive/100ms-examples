@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Quickstart JS</title>
+    <link rel="stylesheet" href="src/styles.css" />
+    <meta charset="UTF-8" />
+  </head>
+
+  <body>
+    <header>
+      <img class="logo" src="https://www.100ms.live/assets/logo.svg" />
+      <button id="leave-btn" class="btn-danger hide">Leave Room</button>
+    </header>
+    <form id="join">
+      <h2>Join Room</h2>
+      <div class="input-container">
+        <input id="name" type="text" name="username" placeholder="Your name" />
+      </div>
+      <div class="input-container">
+        <input id="token" type="text" name="token" placeholder="Auth token" />
+      </div>
+      <button type="button" class="btn-primary" id="join-btn">
+        Join
+      </button>
+    </form>
+
+    <div id="conference" class="conference-section hide">
+      <h2>Conference</h2>
+
+      <div id="peers-container"></div>
+    </div>
+
+    <div id="controls" class="control-bar hide">
+      <button id="mute-aud" class="btn-control">Mute</button>
+      <button id="mute-vid" class="btn-control">Hide</button>
+    </div>
+
+    <script type="module" src="src/index.js"></script>
+  </body>
+</html>
