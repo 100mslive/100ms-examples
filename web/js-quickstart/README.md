@@ -1,4 +1,4 @@
-### Quickstart sample to 100ms in react
+### Quickstart sample to 100ms in javascript
 
 ### Running
 
