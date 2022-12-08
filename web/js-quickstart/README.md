@@ -8,7 +8,8 @@
 - npm build
 - npm start
 - Go to http://localhost:3000
+- Follow further step to generate auth token, [Test the app](https://www.100ms.live/docs/javascript/v2/guides/javascript-quickstart#test-the-app)
 
 ### Fork from CodeSandbox
 
-- TODO
+- [</> Sandbox ](https://codesandbox.io/s/github/100mslive/100ms-examples/tree/main/web/js-quickstart)

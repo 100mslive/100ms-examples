@@ -8,7 +8,9 @@
 - npm build
 - npm start
 - Go to http://localhost:3000
+- Follow further step to generate auth token, [Auth token guide](https://www.100ms.live/docs/javascript/v2/guides/token)
+- For more reference, [link](https://www.100ms.live/docs/javascript/v2/guides/react-quickstart)
 
 ### Fork from CodeSandbox
 
-- TODO
+- [</> Sandbox ](https://codesandbox.io/s/github/100mslive/100ms-examples/tree/main/web/react-quickstart)
