@@ -9,6 +9,7 @@
 - npm start
 - Go to http://localhost:3000
 - Follow further step to generate auth token, [Test the app](https://www.100ms.live/docs/javascript/v2/guides/javascript-quickstart#test-the-app)
+- For more reference, [link](https://www.100ms.live/docs/javascript/v2/guides/javascript-quickstart)
 
 ### Fork from CodeSandbox
 
