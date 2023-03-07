@@ -5,7 +5,7 @@
   "main": "index.html",
   "scripts": {
     "build": "webpack --config webpack.config.js --mode production && cp -r public/* dist",
-    "dev": "webpack serve --mode development --open --port 8888"
+    "dev": "webpack serve --mode development"
   },
   "dependencies": {
     "@100mslive/hms-video-store": "0.6.4",

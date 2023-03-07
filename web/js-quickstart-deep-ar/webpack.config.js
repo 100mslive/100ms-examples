@@ -39,6 +39,15 @@ module.exports = {
       base: "/",
     }),
   ],
+  devServer: {
+    historyApiFallback: true,
+    static: path.resolve(__dirname, "./public"),
+    open: true,
+    compress: true,
+    hot: true,
+    port: 8888,
+    allowedHosts: "all",
+  },
   performance: {
     maxEntrypointSize: 1000000,
     maxAssetSize: 10000000,
