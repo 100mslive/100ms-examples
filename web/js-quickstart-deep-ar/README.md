@@ -7,10 +7,9 @@
 - npm install
 - npm build
 - npm start
-- Go to http://localhost:3000
+- Go to http://localhost:8888
 - Follow further step to generate auth token, [Test the app](https://www.100ms.live/docs/javascript/v2/guides/javascript-quickstart#test-the-app)
-- For more reference, [link](https://www.100ms.live/docs/javascript/v2/guides/javascript-quickstart)
 
 ### Fork from CodeSandbox
 
-- [</> Sandbox ](https://codesandbox.io/s/github/100mslive/100ms-examples/tree/main/web/js-quickstart)
+- [</> Sandbox ](https://codesandbox.io/s/github/100mslive/100ms-examples/tree/main/web/js-quickstart-deep-ar)
