@@ -4,7 +4,6 @@ import {
   selectIsLocalVideoEnabled,
   selectPeers,
   selectIsConnectedToRoom,
-  selectVideoTrackByID
 } from "@100mslive/hms-video-store";
 
 // Initialize HMS Store
@@ -59,13 +58,8 @@ function renderPeer(peer) {
   videoElement.muted = true;
   videoElement.playsinline = true;
   peerTileName.textContent = peer.name;
-
-  hmsStore.subscribe((track) => {
-    if (!track || !videoElement) {
-      return;
-    }
-    hmsActions.attachVideo(track.id, videoElement);
-  }, selectVideoTrackByID(peer.videoTrack));
+  
+  hmsActions.attachVideo(peer.videoTrack, videoElement);
 
   peerTileDiv.append(videoElement);
   peerTileDiv.append(peerTileName);
