@@ -3,7 +3,7 @@ import {
   selectIsLocalAudioEnabled,
   selectIsLocalVideoEnabled,
   selectPeers,
-  selectIsConnectedToRoom
+  selectIsConnectedToRoom,
 } from "@100mslive/hms-video-store";
 
 // Initialize HMS Store
@@ -21,6 +21,9 @@ const leaveBtn = document.getElementById("leave-btn");
 const muteAudio = document.getElementById("mute-aud");
 const muteVideo = document.getElementById("mute-vid");
 const controls = document.getElementById("controls");
+
+// store peer IDs already rendered to avoid re-render on mute/unmute
+const renderedPeerIDs = new Set();
 
 // Joining the room
 joinBtn.onclick = () => {
@@ -50,27 +53,30 @@ function createElementWithClass(tag, className) {
 function renderPeer(peer) {
   const peerTileDiv = createElementWithClass("div", "peer-tile");
   const videoElement = createElementWithClass("video", "peer-video");
-  const peerTileName = createElementWithClass("span", "peer-name");
+  const peerTileName = createElementWithClass("div", "peer-name");
   videoElement.autoplay = true;
   videoElement.muted = true;
   videoElement.playsinline = true;
   peerTileName.textContent = peer.name;
+  
   hmsActions.attachVideo(peer.videoTrack, videoElement);
+
   peerTileDiv.append(videoElement);
   peerTileDiv.append(peerTileName);
+
+  renderedPeerIDs.add(peer.id);
   return peerTileDiv;
 }
 
 // display a tile for each peer in the peer list
 function renderPeers() {
-  peersContainer.innerHTML = "";
   const peers = hmsStore.getState(selectPeers);
 
   peers.forEach((peer) => {
-    if (peer.videoTrack) {
+    if (!renderedPeerIDs.has(peer.id) && peer.videoTrack) {
       peersContainer.append(renderPeer(peer));
     }
-  }); 
+  });
 }
 
 // Reactive state - renderPeers is called whenever there is a change in the peer-list
@@ -88,8 +94,6 @@ muteVideo.onclick = () => {
   const videoEnabled = !hmsStore.getState(selectIsLocalVideoEnabled);
   hmsActions.setLocalVideoEnabled(videoEnabled);
   muteVideo.textContent = videoEnabled ? "Hide" : "Unhide";
-  // Re-render video tile
-  renderPeers();
 };
 
 // Showing the required elements on connection/disconnection
@@ -109,4 +113,3 @@ function onConnection(isConnected) {
 
 // Listen to the connection state
 hmsStore.subscribe(onConnection, selectIsConnectedToRoom);
-  
