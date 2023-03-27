@@ -27,22 +27,23 @@ const renderedPeerIDs = new Set();
 
 // Joining the room
 joinBtn.onclick = async () => {
-  const data = {
-    userName: document.getElementById("name").value,
-    authToken: document.getElementById("token").value,
-    roomCode: document.getElementById("room-code").value,
-  }
+  const userName = document.getElementById("name").value
+  const token = document.getElementById("token").value
+  const roomCode = document.getElementById("room-code").value
+
+  const joinPayload = {}
+  joinPayload.userName = userName
 
   // if room code is provided then fetch auth token
-  if (data.roomCode) {
-    const { token } = await hmsActions.getAuthTokenByRoomCode({ roomCode: data.roomCode })
-    data.authToken = token
+  if (roomCode) {
+    const resp = await hmsActions.getAuthTokenByRoomCode({ roomCode })
+    joinPayload.authToken = resp.token
+  } else {
+    // set the token value set by the user
+    joinPayload.authToken = token
   }
 
-  hmsActions.join({
-    userName: data.userName,
-    authToken: data.authToken
-  });
+  hmsActions.join(joinPayload);
 };
 
 // Leaving the room
