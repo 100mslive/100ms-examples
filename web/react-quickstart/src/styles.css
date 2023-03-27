@@ -157,4 +157,8 @@
   .hide {
     display: none;
   }
+
+  .separator {
+    font-size: 12px;
+  }
   

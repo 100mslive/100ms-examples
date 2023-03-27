@@ -61,10 +61,10 @@ function Join() {
           id="room-code" 
           type="text"
           name="roomCode"
-          placeholder="Room Code"
+          placeholder="Room code"
           onChange={handleInputChange}
         />
-        <span> OR </span>
+        <span className="separator"> OR </span>
         <input
           value={inputValues.token}
           onChange={handleInputChange}
