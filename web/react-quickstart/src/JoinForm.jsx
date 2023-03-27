@@ -15,12 +15,31 @@ function Join() {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    hmsActions.join({
-      userName: inputValues.name,
-      authToken: inputValues.token
-    });
+    const { 
+      userName = '',
+      roomCode = '',
+      token = ''
+    } = inputValues
+
+    const joinPayload = {}
+    joinPayload.userName = userName
+  
+    // if room code is provided then fetch auth token first
+    if (roomCode) {
+      const resp = await hmsActions.getAuthTokenByRoomCode({ roomCode })
+      joinPayload.authToken = resp.token
+    } else {
+      // set the token value set by the user
+      joinPayload.authToken = token
+    }
+  
+    try { 
+      await hmsActions.join(joinPayload);
+    } catch (e) {
+      console.error(e)
+    }
   };
 
   return (
@@ -38,8 +57,15 @@ function Join() {
         />
       </div>
       <div className="input-container">
+        <input 
+          id="room-code" 
+          type="text"
+          name="roomCode"
+          placeholder="Room Code"
+          onChange={handleInputChange}
+        />
+        <span> OR </span>
         <input
-          required
           value={inputValues.token}
           onChange={handleInputChange}
           id="token"
