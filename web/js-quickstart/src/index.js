@@ -26,16 +26,29 @@ const controls = document.getElementById("controls");
 const renderedPeerIDs = new Set();
 
 // Joining the room
-joinBtn.onclick = () => {
-  hmsActions.join({
+joinBtn.onclick = async () => {
+  const data = {
     userName: document.getElementById("name").value,
-    authToken: document.getElementById("token").value
+    authToken: document.getElementById("token").value,
+    roomCode: document.getElementById("room-code").value,
+  }
+
+  // if room code is provided then fetch auth token
+  if (data.roomCode) {
+    const { token } = await hmsActions.getAuthTokenByRoomCode({ roomCode: data.roomCode })
+    data.authToken = token
+  }
+
+  hmsActions.join({
+    userName: data.userName,
+    authToken: data.authToken
   });
 };
 
 // Leaving the room
-function leaveRoom() {
-  hmsActions.leave();
+async function leaveRoom() {
+  await hmsActions.leave();
+  peersContainer.innerHTML = "";
 }
 
 // Cleanup if user refreshes the tab or navigates away
