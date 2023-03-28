@@ -20,23 +20,14 @@ function Join() {
     const { 
       userName = '',
       roomCode = '',
-      token = ''
     } = inputValues
 
-    const joinPayload = {}
-    joinPayload.userName = userName
-  
-    // if room code is provided then fetch auth token first
-    if (roomCode) {
-      const resp = await hmsActions.getAuthTokenByRoomCode({ roomCode })
-      joinPayload.authToken = resp.token
-    } else {
-      // set the token value set by the user
-      joinPayload.authToken = token
-    }
+    // use room code to fetch auth token
+    const resp = await hmsActions.getAuthTokenByRoomCode({ roomCode })
+    const authToken = resp.token
   
     try { 
-      await hmsActions.join(joinPayload);
+      await hmsActions.join({ userName, authToken});
     } catch (e) {
       console.error(e)
     }
@@ -63,15 +54,6 @@ function Join() {
           name="roomCode"
           placeholder="Room code"
           onChange={handleInputChange}
-        />
-        <span className="separator"> OR </span>
-        <input
-          value={inputValues.token}
-          onChange={handleInputChange}
-          id="token"
-          type="text"
-          name="token"
-          placeholder="Auth token"
         />
       </div>
       <button className="btn-primary">Join</button>
