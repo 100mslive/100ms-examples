@@ -27,10 +27,10 @@ const renderedPeerIDs = new Set();
 
 // Joining the room
 joinBtn.onclick = async () => {
-  const userName = document.getElementById("name").value
-  const roomCode = document.getElementById("room-code").value
+  const userName = document.getElementById("name").value;
+  const roomCode = document.getElementById("room-code").value;
   // use room code to fetch auth token
-  const authToken = await hmsActions.getAuthTokenByRoomCode({ roomCode })
+  const authToken = await hmsActions.getAuthTokenByRoomCode({ roomCode });
   // join room using username and auth token
   hmsActions.join({
     userName,
