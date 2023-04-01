@@ -30,8 +30,7 @@ joinBtn.onclick = async () => {
   const userName = document.getElementById("name").value
   const roomCode = document.getElementById("room-code").value
   // use room code to fetch auth token
-  const { token } = await hmsActions.getAuthTokenByRoomCode({ roomCode })
-  const authToken = token
+  const authToken = await hmsActions.getAuthTokenByRoomCode({ roomCode })
   // join room using username and auth token
   hmsActions.join({
     userName,
