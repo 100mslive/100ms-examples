@@ -23,8 +23,7 @@ function Join() {
     } = inputValues
 
     // use room code to fetch auth token
-    const resp = await hmsActions.getAuthTokenByRoomCode({ roomCode })
-    const authToken = resp.token
+    const authToken = await hmsActions.getAuthTokenByRoomCode({ roomCode })
   
     try { 
       await hmsActions.join({ userName, authToken});
