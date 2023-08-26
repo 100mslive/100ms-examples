@@ -10,7 +10,7 @@ export default function PrebuiltPage () {
         {
             router.query.roomCode && 
             <HMSPrebuilt 
-                roomCode={router.query.roomCode}
+                roomCode={router.query.roomCode as string}
                 logo={{
                     url: "https://www.100ms.live/assets/logo.svg"
                 }}
