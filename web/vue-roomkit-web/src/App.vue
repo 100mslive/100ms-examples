@@ -1,5 +1,6 @@
 <template>
   <div id="form" v-if="showInputForm">
+    <p>Join a 100ms room</p>
     <input
       id="room-code-field"
       v-model="roomCode"
@@ -34,6 +35,10 @@ export default {
 </script>
 
 <style>
+body {
+  font-family: sans-serif;
+}
+
 #form {
   background-color: black;
   height: 100vh;
@@ -42,6 +47,7 @@ export default {
   justify-content: center;
   align-items: center;
   gap: 0.5rem;
+  color: white;
 }
 
 #btn {
@@ -50,6 +56,7 @@ export default {
   color: white;
   border-radius: 0.25rem;
   width: 10rem;
+  border: none;
 }
 
 #room-code-field {
