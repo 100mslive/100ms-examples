@@ -1,18 +1,66 @@
 <template>
+  <div id="form" v-if="showInputForm">
+    <input
+      id="room-code-field"
+      v-model="roomCode"
+      type="text"
+      placeholder="Enter room code"
+    />
+    <button id="btn" @click="renderHmsPrebuilt">Submit</button>
+  </div>
   <div id="app">
-    <hms-prebuilt room-code="fba-xji-pnk"></hms-prebuilt>
+    <hms-prebuilt v-if="showHmsPrebuilt" :room-code="roomCode"></hms-prebuilt>
   </div>
 </template>
 
 <script>
-import "@100mslive/roomkit-web-component";
+import '@100mslive/roomkit-web-component';
 
 export default {
-  name: "App",
+  data() {
+    return {
+      roomCode: '',
+      showHmsPrebuilt: false,
+      showInputForm: true,
+    };
+  },
+  methods: {
+    renderHmsPrebuilt() {
+      this.showHmsPrebuilt = true;
+      this.showInputForm = false;
+    },
+  },
 };
 </script>
 
 <style>
+#form {
+  background-color: black;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+#btn {
+  padding: 0.5rem;
+  background-color: #2572ed;
+  color: white;
+  border-radius: 0.25rem;
+  width: 10rem;
+}
+
+#room-code-field {
+  padding: 0.5rem;
+  border-radius: 0.25rem;
+  border: 2px solid #2572ed;
+  background: none;
+  color: white;
+  text-align: center;
+}
+
 #app {
   height: 100vh;
 }
