@@ -15,7 +15,7 @@
 </template>
 
 <script>
-import '@100mslive/roomkit-web-component';
+import '@100mslive/roomkit-web';
 
 export default {
   data() {
