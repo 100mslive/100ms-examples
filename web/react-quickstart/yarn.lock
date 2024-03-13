@@ -2,21 +2,21 @@
 # yarn lockfile v1
 
 
-"@100mslive/hms-video-store@0.10.0":
-  version "0.10.0"
-  resolved "https://registry.yarnpkg.com/@100mslive/hms-video-store/-/hms-video-store-0.10.0.tgz#2702f1f8a54d7aed7ed6f5fe3ae4addc229c7a7c"
-  integrity sha512-jpEr7CT0xYPtJLSW69ONmwCK+Zo2oQ7zTwgKx+kRxGoA4QEfbB6k0xjUdLsjG0heUjaiwJBWIwnKUCzD3FLYdA==
+"@100mslive/hms-video-store@0.10.9":
+  version "0.10.9"
+  resolved "https://registry.yarnpkg.com/@100mslive/hms-video-store/-/hms-video-store-0.10.9.tgz#cb90806803c1b042c8df7e3dbd3aa6fb4eaa4613"
+  integrity sha512-G0O/ei+d+Qnw56R3akphsyLOyXjt/9ZcXTRhKJyZ2ObEjvSWRviJCWIqQKq0hEIcWuTszFvoYlmOEAcfPq/O2A==
   dependencies:
-    "@100mslive/hms-video" "0.9.0"
+    "@100mslive/hms-video" "0.9.9"
     eventemitter2 "^6.4.7"
     immer "^9.0.6"
     reselect "4.0.0"
     zustand "3.5.7"
 
-"@100mslive/hms-video@0.9.0":
-  version "0.9.0"
-  resolved "https://registry.yarnpkg.com/@100mslive/hms-video/-/hms-video-0.9.0.tgz#b42b87db13daadbd57d7ab871b147faea504264e"
-  integrity sha512-l8wx2bkQtOuAUN+I7ygLPrhpjsU+kQgTtB1y1lVS/Ai5MRHpg6YWZt7S7AmKLt+fpD6sFD+kNoK9x7dAGByWhw==
+"@100mslive/hms-video@0.9.9":
+  version "0.9.9"
+  resolved "https://registry.yarnpkg.com/@100mslive/hms-video/-/hms-video-0.9.9.tgz#b87570ae9c95f7c738f695e14092d42a95bd6dc7"
+  integrity sha512-/VFzNwypyqZ/194g04tssr8J2qkVy1n3tUFjQz68f5c0WvoAKJWNuSWbP+ZAfm4rZq8HYIk4vufqXKGAPfKI8g==
   dependencies:
     eventemitter2 "^6.4.7"
     sdp-transform "^2.14.1"
@@ -24,12 +24,12 @@
     uuid "^8.3.2"
     webrtc-adapter "^8.0.0"
 
-"@100mslive/react-sdk@^0.8.0":
-  version "0.8.0"
-  resolved "https://registry.yarnpkg.com/@100mslive/react-sdk/-/react-sdk-0.8.0.tgz#8cc2c7c6325c196a36b8b66b23c71ee167b61f29"
-  integrity sha512-P+dXk0EwHGXYXzhwAJXMNSs4TmjPg63AisNFFzYl0nQ+xt+fqsmeVO5qTkhgMlzCJfzEGaYm5ijmL70mKistFg==
+"@100mslive/react-sdk@0.8.9":
+  version "0.8.9"
+  resolved "https://registry.yarnpkg.com/@100mslive/react-sdk/-/react-sdk-0.8.9.tgz#4af6566041661ce3e58adf2614696f069bf768bf"
+  integrity sha512-y5gx/sVngfLFXFEZ3uIkpn17IJvbGMEABwzuhIIi9weFs5LK/oc1/PnAVDk9iOiADwP9EPDyaOAAGuLWTihFfw==
   dependencies:
-    "@100mslive/hms-video-store" "0.10.0"
+    "@100mslive/hms-video-store" "0.10.9"
     react-resize-detector "^7.0.0"
     zustand "^3.6.2"
 

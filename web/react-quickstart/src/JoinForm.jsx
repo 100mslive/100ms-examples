@@ -26,7 +26,10 @@ function Join() {
     const authToken = await hmsActions.getAuthTokenByRoomCode({ roomCode });
   
     try { 
-      await hmsActions.join({ userName, authToken});
+      await hmsActions.join({ userName, authToken, initialSettings: {
+        isAudioMuted: true,
+        isVideoMuted: true,
+      }});
     } catch (e) {
       console.error(e);
     }

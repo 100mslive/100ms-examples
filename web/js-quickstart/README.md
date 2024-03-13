@@ -3,11 +3,7 @@
 - This is an example of building a Video Conferencing app in JS with [100ms](https://100ms.live) SDK.
 
 ### Running
-
-- npm install
-- npm build
-- npm start
-- Go to http://localhost:3000
+- Run html on your local host
 - Follow further step to generate auth token, [Test the app](https://www.100ms.live/docs/javascript/v2/guides/javascript-quickstart#test-the-app)
 - For more reference, [link](https://www.100ms.live/docs/javascript/v2/guides/javascript-quickstart)
 

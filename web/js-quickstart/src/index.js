@@ -1,10 +1,13 @@
-import {
+console.log("rnn-kam-hji");
+
+import  {
   HMSReactiveStore,
   selectIsLocalAudioEnabled,
   selectIsLocalVideoEnabled,
   selectPeers,
   selectIsConnectedToRoom,
-} from "@100mslive/hms-video-store";
+} from "https://cdn.skypack.dev/@100mslive/hms-video-store";
+
 
 // Initialize HMS Store
 const hmsManager = new HMSReactiveStore();
