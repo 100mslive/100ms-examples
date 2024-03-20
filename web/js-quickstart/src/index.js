@@ -72,6 +72,7 @@ async function renderPeer(peer) {
   peerTileDiv.append(peerTileName);
   peerTileDiv.append(peerAudioMuted);
   peerTileDiv.append(peerVideoMuted);
+  peerTileDiv.id = `peer-tile-${peer.id}`;
   hmsStore.subscribe((enabled) => {
     peerAudioMuted.style.display = enabled ? 'none': 'flex';
     peerAudioMuted.innerHTML = `<span class="material-symbols-outlined">
@@ -91,8 +92,14 @@ async function renderPeer(peer) {
 }
 
 // display a tile for each peer in the peer list
-function renderPeers() {
-  const peers = hmsStore.getState(selectPeers);
+function renderPeers(peers) {
+  const currentPeerIds = new Set(peers.map(peer => peer.id));  
+  // remove peers that are not present
+  renderedPeerIDs.forEach(peerId => {
+    if(!currentPeerIds.has(peerId)) {
+      document.getElementById(`peer-tile-${peerId}`).remove();
+    }
+  })
 
   peers.forEach(async (peer) => {
     if (!renderedPeerIDs.has(peer.id) && peer.videoTrack) {
