@@ -4,6 +4,8 @@ import {
   selectIsLocalVideoEnabled,
   selectPeers,
   selectIsConnectedToRoom,
+  selectIsPeerAudioEnabled,
+  selectIsPeerVideoEnabled,
 } from "@100mslive/hms-video-store";
 
 // Initialize HMS Store
@@ -34,7 +36,7 @@ joinBtn.onclick = async () => {
   // join room using username and auth token
   hmsActions.join({
     userName,
-    authToken
+    authToken,
   });
 };
 
@@ -56,31 +58,52 @@ function createElementWithClass(tag, className) {
 }
 
 // Render a single peer
-function renderPeer(peer) {
+async function renderPeer(peer) {
   const peerTileDiv = createElementWithClass("div", "peer-tile");
   const videoElement = createElementWithClass("video", "peer-video");
   const peerTileName = createElementWithClass("div", "peer-name");
+  const peerAudioMuted = createElementWithClass("div", "peer-audio-muted");
+  const peerVideoMuted = createElementWithClass("div", "peer-video-muted");
   videoElement.autoplay = true;
   videoElement.muted = true;
   videoElement.playsinline = true;
   peerTileName.textContent = peer.name;
-  
-  hmsActions.attachVideo(peer.videoTrack, videoElement);
-
   peerTileDiv.append(videoElement);
   peerTileDiv.append(peerTileName);
-
+  peerTileDiv.append(peerAudioMuted);
+  peerTileDiv.append(peerVideoMuted);
+  peerTileDiv.id = `peer-tile-${peer.id}`;
+  hmsStore.subscribe((enabled) => {
+    peerAudioMuted.style.display = enabled ? 'none': 'flex';
+    peerAudioMuted.innerHTML = `<span class="material-symbols-outlined">
+    ${enabled ? "mic" : "mic_off"}
+ </span>`;
+  }, selectIsPeerAudioEnabled(peer.id));
+  hmsStore.subscribe((enabled) => {
+    peerVideoMuted.style.display = enabled ? 'none': 'flex';
+    peerVideoMuted.innerHTML = `<span class="material-symbols-outlined">
+         ${enabled ? "videocam" : "videocam_off"}
+      </span>
+    `;
+  }, selectIsPeerVideoEnabled(peer.id));
+  await hmsActions.attachVideo(peer.videoTrack, videoElement);
   renderedPeerIDs.add(peer.id);
   return peerTileDiv;
 }
 
 // display a tile for each peer in the peer list
-function renderPeers() {
-  const peers = hmsStore.getState(selectPeers);
+function renderPeers(peers) {
+  const currentPeerIds = new Set(peers.map(peer => peer.id));  
+  // remove peers that are not present
+  renderedPeerIDs.forEach(peerId => {
+    if(!currentPeerIds.has(peerId)) {
+      document.getElementById(`peer-tile-${peerId}`).remove();
+    }
+  })
 
-  peers.forEach((peer) => {
+  peers.forEach(async (peer) => {
     if (!renderedPeerIDs.has(peer.id) && peer.videoTrack) {
-      peersContainer.append(renderPeer(peer));
+      peersContainer.append(await renderPeer(peer));
     }
   });
 }
@@ -92,14 +115,20 @@ hmsStore.subscribe(renderPeers, selectPeers);
 muteAudio.onclick = () => {
   const audioEnabled = !hmsStore.getState(selectIsLocalAudioEnabled);
   hmsActions.setLocalAudioEnabled(audioEnabled);
-  muteAudio.textContent = audioEnabled ? "Mute" : "Unmute";
+  muteAudio.innerHTML = `<span class="material-symbols-outlined">
+         ${audioEnabled ? "mic" : "mic_off"}
+      </span>
+    `;
 };
 
 // Mute and unmute video
 muteVideo.onclick = () => {
   const videoEnabled = !hmsStore.getState(selectIsLocalVideoEnabled);
   hmsActions.setLocalVideoEnabled(videoEnabled);
-  muteVideo.textContent = videoEnabled ? "Hide" : "Unhide";
+  muteVideo.innerHTML = `<span class="material-symbols-outlined">
+         ${videoEnabled ? "videocam" : "videocam_off"}
+      </span>
+    `;
 };
 
 // Showing the required elements on connection/disconnection

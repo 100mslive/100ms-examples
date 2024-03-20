@@ -3,6 +3,8 @@
   <head>
     <title>Quickstart JS</title>
     <link rel="stylesheet" href="src/styles.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined"
+      rel="stylesheet">
     <meta charset="UTF-8" />
   </head>
 
@@ -31,8 +33,16 @@
     </div>
 
     <div id="controls" class="control-bar hide">
-      <button id="mute-aud" class="btn-control">Mute</button>
-      <button id="mute-vid" class="btn-control">Hide</button>
+      <button id="mute-aud" class="btn-control">
+        <span class="material-symbols-outlined">
+            mic
+        </span>
+      </button>
+      <button id="mute-vid" class="btn-control">
+        <span class="material-symbols-outlined">
+         videocam
+      </span>
+      </button>
     </div>
 
     <script type="module" src="src/index.js"></script>
