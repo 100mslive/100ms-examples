@@ -1,3 +1,6 @@
+// Candidate roomCode: pya-qdcl-vee
+// Proctor roomCode: jwi-oqyh-pqw
+
 import {
   HMSReactiveStore,
   selectPeers,
@@ -69,7 +72,7 @@ const audioToggle = async (peerID, setContent) => {
   await hmsActions.changeRoleOfPeer(
     peerID,
     isPeerOnStage ? ROLES.CANDIDATE : ROLES.ON_STAGE_CANDIDATE,
-    true
+    true,
   );
   setContent(isPeerOnStage ? "Unmute" : "Mute");
 };
@@ -106,7 +109,7 @@ async function renderPeer(peer, showScreenShare) {
   if (!screenShareTrackID) {
     await hmsActions.setScreenShareEnabled(true);
     screenShareTrackID = hmsStore.getState(
-      selectScreenShareByPeerID(peer.id)
+      selectScreenShareByPeerID(peer.id),
     ).id;
     screenShareTrackIDs.set(peer.id, screenShareTrackID);
   }
@@ -145,7 +148,7 @@ hmsStore.subscribe(() => {
   const proctors = hmsStore.getState(selectPeersByRole(ROLES.PROCTOR));
   proctors.forEach(
     async (proctor) =>
-      await hmsActions.setRemoteTracksEnabled(proctor.audioTrack)
+      await hmsActions.setRemoteTracksEnabled(proctor.audioTrack),
   );
 }, selectPeersByRole(ROLES.ON_STAGE_CANDIDATE));
 
