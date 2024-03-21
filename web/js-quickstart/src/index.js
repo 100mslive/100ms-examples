@@ -73,12 +73,14 @@ async function renderPeer(peer, showScreenShare, proctorAudioTrack) {
   const div = createElementWithClass("div", "");
   const unmutedForPeer = unmutedForPeerIDs.has(peer.id);
   audioButton.innerText = unmutedForPeer ? "Mute" : "Unmute";
-  
+
   // Instead of changing the role, the proctor's audio is restored only for the selected peer
   // Faster and simpler than role change
   audioButton.onclick = () => {
+    console.log("ollo", { proctorAudioTrack, unmutedForPeer });
     if (unmutedForPeer) {
       if (proctorAudioTrack) {
+        console.log("ollo muting");
         hmsActions.setVolume(0, proctorAudioTrack);
       }
       unmutedForPeerIDs.delete(peer.id);
@@ -153,7 +155,7 @@ function renderPeers(peers) {
   peersToRender.forEach(async (peer) => {
     if (!renderedPeerIDs.has(peer.id) && peer.videoTrack) {
       peersContainer.append(
-        await renderPeer(peer, !localPeerIsProctor, proctorPeer?.audioTrack)
+        await renderPeer(peer, localPeerIsProctor, proctorPeer?.audioTrack)
       );
     }
   });
