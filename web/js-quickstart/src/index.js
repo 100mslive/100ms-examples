@@ -2,14 +2,17 @@ import {
   HMSReactiveStore,
   selectPeers,
   selectIsConnectedToRoom,
-  selectIsPeerAudioEnabled,
-  selectIsPeerVideoEnabled,
   selectScreenShareByPeerID,
   selectLocalPeer,
+  selectPeerByID,
   selectPeersByRole,
 } from "@100mslive/hms-video-store";
 
-const ROLES = { PROCTOR: "proctor", CANDIDATE: "candidate" };
+const ROLES = {
+  PROCTOR: "proctor",
+  CANDIDATE: "candidate",
+  ON_STAGE_CANDIDATE: "on-stage-candidate",
+};
 
 // Initialize HMS Store
 const hmsManager = new HMSReactiveStore();
@@ -27,7 +30,6 @@ const leaveBtn = document.getElementById("leave-btn");
 // store peer IDs already rendered to avoid re-render on mute/unmute
 const renderedPeerIDs = new Set();
 const screenShareTrackIDs = new Map();
-const unmutedForPeerIDs = new Set();
 
 // Joining the room
 joinBtn.onclick = async () => {
@@ -39,6 +41,7 @@ joinBtn.onclick = async () => {
   hmsActions.join({
     userName,
     authToken,
+    settings: { isAudioMuted: false, isVideoMuted: false },
   });
 };
 
@@ -59,44 +62,31 @@ function createElementWithClass(tag, className) {
   return newElement;
 }
 
-const proctorAudioTrack = hmsStore.getState(
-  selectPeersByRole(ROLES.PROCTOR)
-)?.[0]?.audioTrack;
-
-const audioToggle = (peerID) => {
-  console.log("ollo clicked", { peerID, proctorAudioTrack });
-  if (unmutedForPeerIDs.has(peerID)) {
-    if (proctorAudioTrack) {
-      console.log("ollo muting");
-      hmsActions.setVolume(0, proctorAudioTrack);
-    }
-    unmutedForPeerIDs.delete(peer.id);
-  } else {
-    unmutedForPeerIDs.add(peer.id);
-    if (proctorAudioTrack) {
-      hmsActions.setVolume(100, proctorAudioTrack);
-    }
-  }
+const audioToggle = async (peerID, setContent) => {
+  const isPeerOnStage =
+    hmsStore.getState(selectPeerByID(peerID))?.roleName ===
+    ROLES.ON_STAGE_CANDIDATE;
+  await hmsActions.changeRoleOfPeer(
+    peerID,
+    isPeerOnStage ? ROLES.CANDIDATE : ROLES.ON_STAGE_CANDIDATE,
+    true
+  );
+  setContent(isPeerOnStage ? "Unmute" : "Mute");
 };
 
 // Render a single peer
 async function renderPeer(peer, showScreenShare) {
-  const isCandidate = peer.roleName === ROLES.CANDIDATE;
-  if (!isCandidate) return;
+  const isProctor = peer.roleName === ROLES.PROCTOR;
+  if (isProctor) return;
   const peerTileDiv = createElementWithClass("div", "peer-tile");
   const videoElement = createElementWithClass("video", "peer-video");
   const screenElement = createElementWithClass("video", "peer-video");
   const peerTileName = createElementWithClass("div", "peer-name");
-  const peerAudioMuted = createElementWithClass("div", "peer-audio-muted");
-  const peerVideoMuted = createElementWithClass("div", "peer-video-muted");
   const audioButton = createElementWithClass("button", "btn-control");
   const div = createElementWithClass("div", "");
-  const unmutedForPeer = unmutedForPeerIDs.has(peer.id);
-  audioButton.innerText = unmutedForPeer ? "Mute" : "Unmute";
-
-  // Instead of changing the role, the proctor's audio is restored only for the selected peer
-  // Faster and simpler than role change
-  audioButton.onclick = () => audioToggle(peer.id);
+  audioButton.innerText = peer.roleName === ROLES.CANDIDATE ? "Unmute" : "Mute";
+  audioButton.onclick = () =>
+    audioToggle(peer.id, (buttonText) => (audioButton.innerText = buttonText));
   div.append(peerTileName);
   if (showScreenShare) div.append(audioButton);
 
@@ -109,23 +99,8 @@ async function renderPeer(peer, showScreenShare) {
   peerTileName.textContent = peer.name;
   peerTileDiv.append(div);
   peerTileDiv.append(videoElement);
-  peerTileDiv.append(peerAudioMuted);
-  peerTileDiv.append(peerVideoMuted);
   if (showScreenShare) peerTileDiv.append(screenElement);
   peerTileDiv.id = `peer-tile-${peer.id}`;
-  hmsStore.subscribe((enabled) => {
-    peerAudioMuted.style.display = enabled ? "none" : "flex";
-    peerAudioMuted.innerHTML = `<span class="material-symbols-outlined">
-    ${enabled ? "mic" : "mic_off"}
- </span>`;
-  }, selectIsPeerAudioEnabled(peer.id));
-  hmsStore.subscribe((enabled) => {
-    peerVideoMuted.style.display = enabled ? "none" : "flex";
-    peerVideoMuted.innerHTML = `<span class="material-symbols-outlined">
-         ${enabled ? "videocam" : "videocam_off"}
-      </span>
-    `;
-  }, selectIsPeerVideoEnabled(peer.id));
 
   let screenShareTrackID = screenShareTrackIDs.get(peer.id);
   if (!screenShareTrackID) {
@@ -150,25 +125,29 @@ function renderPeers(peers) {
   // remove peers that are not present
   renderedPeerIDs.forEach((peerId) => {
     if (!currentPeerIds.has(peerId)) {
-      document.getElementById(`peer-tile-${peerId}`).remove();
+      document.getElementById(`peer-tile-${peerId}`)?.remove();
     }
   });
   const localPeer = hmsStore.getState(selectLocalPeer);
   const localPeerIsProctor = localPeer?.roleName === ROLES.PROCTOR;
-  const proctorPeer = hmsStore.getState(selectPeersByRole(ROLES.PROCTOR));
   const peersToRender = localPeerIsProctor ? peers : [localPeer];
 
   peersToRender.forEach(async (peer) => {
     if (!renderedPeerIDs.has(peer.id) && peer.videoTrack) {
-      peersContainer.append(
-        await renderPeer(peer, localPeerIsProctor, proctorPeer?.audioTrack)
-      );
+      peersContainer.append(await renderPeer(peer, localPeerIsProctor));
     }
   });
 }
 
 // Reactive state - renderPeers is called whenever there is a change in the peer-list
 hmsStore.subscribe(renderPeers, selectPeers);
+hmsStore.subscribe(() => {
+  const proctors = hmsStore.getState(selectPeersByRole(ROLES.PROCTOR));
+  proctors.forEach(
+    async (proctor) =>
+      await hmsActions.setRemoteTracksEnabled(proctor.audioTrack)
+  );
+}, selectPeersByRole(ROLES.ON_STAGE_CANDIDATE));
 
 // Showing the required elements on connection/disconnection
 function onConnection(isConnected) {
