@@ -59,8 +59,28 @@ function createElementWithClass(tag, className) {
   return newElement;
 }
 
+const proctorAudioTrack = hmsStore.getState(
+  selectPeersByRole(ROLES.PROCTOR)
+)?.[0]?.audioTrack;
+
+const audioToggle = (peerID) => {
+  console.log("ollo clicked", { peerID, proctorAudioTrack });
+  if (unmutedForPeerIDs.has(peerID)) {
+    if (proctorAudioTrack) {
+      console.log("ollo muting");
+      hmsActions.setVolume(0, proctorAudioTrack);
+    }
+    unmutedForPeerIDs.delete(peer.id);
+  } else {
+    unmutedForPeerIDs.add(peer.id);
+    if (proctorAudioTrack) {
+      hmsActions.setVolume(100, proctorAudioTrack);
+    }
+  }
+};
+
 // Render a single peer
-async function renderPeer(peer, showScreenShare, proctorAudioTrack) {
+async function renderPeer(peer, showScreenShare) {
   const isCandidate = peer.roleName === ROLES.CANDIDATE;
   if (!isCandidate) return;
   const peerTileDiv = createElementWithClass("div", "peer-tile");
@@ -76,21 +96,7 @@ async function renderPeer(peer, showScreenShare, proctorAudioTrack) {
 
   // Instead of changing the role, the proctor's audio is restored only for the selected peer
   // Faster and simpler than role change
-  audioButton.onclick = () => {
-    console.log("ollo", { proctorAudioTrack, unmutedForPeer });
-    if (unmutedForPeer) {
-      if (proctorAudioTrack) {
-        console.log("ollo muting");
-        hmsActions.setVolume(0, proctorAudioTrack);
-      }
-      unmutedForPeerIDs.delete(peer.id);
-    } else {
-      unmutedForPeerIDs.add(peer.id);
-      if (proctorAudioTrack) {
-        hmsActions.setVolume(100, proctorAudioTrack);
-      }
-    }
-  };
+  audioButton.onclick = () => audioToggle(peer.id);
   div.append(peerTileName);
   if (showScreenShare) div.append(audioButton);
 
