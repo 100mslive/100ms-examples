@@ -118,7 +118,6 @@ async function renderPeer(peer, showScreenShare) {
   if (showScreenShare)
     await hmsActions.attachVideo(screenShareTrackID, screenElement);
 
-  renderedPeerIDs.add(peer.id);
   return peerTileDiv;
 }
 
@@ -137,19 +136,21 @@ function renderPeers(peers) {
 
   peersToRender.forEach(async (peer) => {
     if (!renderedPeerIDs.has(peer.id) && peer.videoTrack) {
+      renderedPeerIDs.add(peer.id);
       peersContainer.append(await renderPeer(peer, localPeerIsProctor));
     }
   });
 }
 
 // Reactive state - renderPeers is called whenever there is a change in the peer-list
-hmsStore.subscribe(renderPeers, selectPeers);
+hmsStore.subscribe((peers) => {
+  renderPeers(peers);
+}, selectPeers);
 hmsStore.subscribe(() => {
   const proctors = hmsStore.getState(selectPeersByRole(ROLES.PROCTOR));
-  proctors.forEach(
-    async (proctor) =>
-      await hmsActions.setRemoteTracksEnabled(proctor.audioTrack),
-  );
+  proctors.forEach(async (proctor) => {
+    await hmsActions.setRemoteTracksEnabled(proctor.audioTrack, true);
+  });
 }, selectPeersByRole(ROLES.ON_STAGE_CANDIDATE));
 
 // Showing the required elements on connection/disconnection
