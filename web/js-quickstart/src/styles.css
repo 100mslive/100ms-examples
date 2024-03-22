@@ -88,7 +88,6 @@
   
   .conference-section {
     padding: 20px 30px;
-    max-width: 960px;
     margin: 0 auto;
   }
   
@@ -100,13 +99,12 @@
   }
   
   #peers-container {
-    display: flex;
-    flex-flow: row wrap;
-    gap: 8px;
+    max-height: 100%;
+    overflow-y: auto;
   }
   
   .peer-video {
-    width: 100%;
+    width: 530;
     height: 100%;
     border-radius: 8px;
     object-fit: cover;
@@ -123,10 +121,15 @@
   }
   
   .peer-tile {
-    height: 130px;
-    aspect-ratio: 16/9;
+    display: flex;
+    gap: 16px;
+    height: 300px;
+    justify-content: center;
+    align-items: center;
+    max-width: 100%;
     border-radius: 8px;
     position: relative;
+    margin-bottom: 24px;
   }
  
   .peer-audio-muted {

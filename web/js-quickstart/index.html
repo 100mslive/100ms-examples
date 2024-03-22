@@ -3,8 +3,10 @@
   <head>
     <title>Quickstart JS</title>
     <link rel="stylesheet" href="src/styles.css" />
-    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined"
-      rel="stylesheet">
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined"
+      rel="stylesheet"
+    />
     <meta charset="UTF-8" />
   </head>
 
@@ -19,30 +21,18 @@
         <input id="name" type="text" name="username" placeholder="Your name" />
       </div>
       <div class="input-container">
-        <input id="room-code" type="text" name="roomCode" placeholder="Room code" />
+        <input
+          id="room-code"
+          type="text"
+          name="roomCode"
+          placeholder="Room code"
+        />
       </div>
-      <button type="button" class="btn-primary" id="join-btn">
-        Join
-      </button>
+      <button type="button" class="btn-primary" id="join-btn">Join</button>
     </form>
 
     <div id="conference" class="conference-section hide">
-      <h2>Conference</h2>
-
       <div id="peers-container"></div>
-    </div>
-
-    <div id="controls" class="control-bar hide">
-      <button id="mute-aud" class="btn-control">
-        <span class="material-symbols-outlined">
-            mic
-        </span>
-      </button>
-      <button id="mute-vid" class="btn-control">
-        <span class="material-symbols-outlined">
-         videocam
-      </span>
-      </button>
     </div>
 
     <script type="module" src="src/index.js"></script>
