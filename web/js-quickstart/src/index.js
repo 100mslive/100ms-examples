@@ -1,6 +1,9 @@
 // Candidate roomCode: pya-qdcl-vee
 // Proctor roomCode: jwi-oqyh-pqw
 
+// Run the server
+// yarn install && yarn start
+
 import {
   HMSReactiveStore,
   selectPeers,
