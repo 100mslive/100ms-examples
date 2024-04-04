@@ -96,6 +96,7 @@ async function renderPeer(peer) {
 }
 
 async function renderScreenshare(screenshareID) {
+  renderedScreenshareIDs.add(screenshareID);
   const screenshareTileDiv = createElementWithClass("div", "peer-tile");
   const screenshareTileName = createElementWithClass("div", "peer-name");
   const videoElement = createElementWithClass("video", "peer-video");
@@ -150,7 +151,6 @@ hmsStore.subscribe((screensharingPeers) => {
 
   currentScreenShareIDs.forEach(async (screenshareID) => {
     if (!renderedScreenshareIDs.has(screenshareID)) {
-      renderedScreenshareIDs.add(screenshareID);
       if (screenshareID)
         peersContainer.append(await renderScreenshare(screenshareID));
     }
