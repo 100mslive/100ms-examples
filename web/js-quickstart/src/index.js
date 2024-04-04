@@ -6,6 +6,9 @@ import {
   selectIsConnectedToRoom,
   selectIsPeerAudioEnabled,
   selectIsPeerVideoEnabled,
+  selectIsLocalScreenShared,
+  selectScreenShareByPeerID,
+  selectPeersScreenSharing,
 } from "@100mslive/hms-video-store";
 
 // Initialize HMS Store
@@ -22,10 +25,12 @@ const peersContainer = document.getElementById("peers-container");
 const leaveBtn = document.getElementById("leave-btn");
 const muteAudio = document.getElementById("mute-aud");
 const muteVideo = document.getElementById("mute-vid");
+const toggleScreenshare = document.getElementById("toggle-screenshare");
 const controls = document.getElementById("controls");
 
 // store peer IDs already rendered to avoid re-render on mute/unmute
 const renderedPeerIDs = new Set();
+const renderedScreenshareIDs = new Set();
 
 // Joining the room
 joinBtn.onclick = async () => {
@@ -74,35 +79,50 @@ async function renderPeer(peer) {
   peerTileDiv.append(peerVideoMuted);
   peerTileDiv.id = `peer-tile-${peer.id}`;
   hmsStore.subscribe((enabled) => {
-    peerAudioMuted.style.display = enabled ? 'none': 'flex';
+    peerAudioMuted.style.display = enabled ? "none" : "flex";
     peerAudioMuted.innerHTML = `<span class="material-symbols-outlined">
     ${enabled ? "mic" : "mic_off"}
  </span>`;
   }, selectIsPeerAudioEnabled(peer.id));
   hmsStore.subscribe((enabled) => {
-    peerVideoMuted.style.display = enabled ? 'none': 'flex';
+    peerVideoMuted.style.display = enabled ? "none" : "flex";
     peerVideoMuted.innerHTML = `<span class="material-symbols-outlined">
          ${enabled ? "videocam" : "videocam_off"}
       </span>
     `;
   }, selectIsPeerVideoEnabled(peer.id));
   await hmsActions.attachVideo(peer.videoTrack, videoElement);
-  renderedPeerIDs.add(peer.id);
   return peerTileDiv;
+}
+
+async function renderScreenshare(screenshareID) {
+  const screenshareTileDiv = createElementWithClass("div", "peer-tile");
+  const screenshareTileName = createElementWithClass("div", "peer-name");
+  const videoElement = createElementWithClass("video", "peer-video");
+  videoElement.autoplay = true;
+  videoElement.muted = true;
+  videoElement.playsinline = true;
+  screenshareTileName.textContent = "screenshare";
+  screenshareTileDiv.append(videoElement);
+  screenshareTileDiv.append(screenshareTileName);
+  screenshareTileDiv.id = `screen-share-tile-${screenshareID}`;
+  await hmsActions.attachVideo(screenshareID, videoElement);
+  return screenshareTileDiv;
 }
 
 // display a tile for each peer in the peer list
 function renderPeers(peers) {
-  const currentPeerIds = new Set(peers.map(peer => peer.id));  
+  const currentPeerIds = new Set(peers.map((peer) => peer.id));
   // remove peers that are not present
-  renderedPeerIDs.forEach(peerId => {
-    if(!currentPeerIds.has(peerId)) {
+  renderedPeerIDs.forEach((peerId) => {
+    if (!currentPeerIds.has(peerId)) {
       document.getElementById(`peer-tile-${peerId}`).remove();
     }
-  })
+  });
 
   peers.forEach(async (peer) => {
     if (!renderedPeerIDs.has(peer.id) && peer.videoTrack) {
+      renderedPeerIDs.add(peer.id);
       peersContainer.append(await renderPeer(peer));
     }
   });
@@ -110,6 +130,34 @@ function renderPeers(peers) {
 
 // Reactive state - renderPeers is called whenever there is a change in the peer-list
 hmsStore.subscribe(renderPeers, selectPeers);
+
+hmsStore.subscribe((screensharingPeers) => {
+  const currentScreenShareIDs = new Set();
+  screensharingPeers.forEach((peer) => {
+    const screenshareID = hmsStore.getState(
+      selectScreenShareByPeerID(peer.id)
+    ).id;
+    currentScreenShareIDs.add(screenshareID);
+  });
+  console.log("ollo before", { renderedScreenshareIDs, currentScreenShareIDs });
+
+  // Remove screenshare tiles for peers who have stopped screensharing or left
+  renderedScreenshareIDs.forEach((renderedID) => {
+    if (!currentScreenShareIDs.has(renderedID)) {
+      document.getElementById(`screen-share-tile-${renderedID}`).remove();
+      renderedScreenshareIDs.delete(renderedID);
+    }
+  });
+
+  currentScreenShareIDs.forEach(async (screenshareID) => {
+    if (!renderedScreenshareIDs.has(screenshareID)) {
+      renderedScreenshareIDs.add(screenshareID);
+      if (screenshareID)
+        peersContainer.append(await renderScreenshare(screenshareID));
+    }
+  });
+  console.log("ollo after", { renderedScreenshareIDs, currentScreenShareIDs });
+}, selectPeersScreenSharing);
 
 // Mute and unmute audio
 muteAudio.onclick = () => {
@@ -127,6 +175,16 @@ muteVideo.onclick = () => {
   hmsActions.setLocalVideoEnabled(videoEnabled);
   muteVideo.innerHTML = `<span class="material-symbols-outlined">
          ${videoEnabled ? "videocam" : "videocam_off"}
+      </span>
+    `;
+};
+
+// Toggle local screenshare
+toggleScreenshare.onclick = async () => {
+  const isLocalScreenshared = hmsStore.getState(selectIsLocalScreenShared);
+  await hmsActions.setScreenShareEnabled(!isLocalScreenshared);
+  toggleScreenshare.innerHTML = `<span class="material-symbols-outlined">
+         ${isLocalScreenshared ? "screen_share" : "stop_screen_share"}
       </span>
     `;
 };
