@@ -139,7 +139,6 @@ hmsStore.subscribe((screensharingPeers) => {
     ).id;
     currentScreenShareIDs.add(screenshareID);
   });
-  console.log("ollo before", { renderedScreenshareIDs, currentScreenShareIDs });
 
   // Remove screenshare tiles for peers who have stopped screensharing or left
   renderedScreenshareIDs.forEach((renderedID) => {
@@ -156,7 +155,6 @@ hmsStore.subscribe((screensharingPeers) => {
         peersContainer.append(await renderScreenshare(screenshareID));
     }
   });
-  console.log("ollo after", { renderedScreenshareIDs, currentScreenShareIDs });
 }, selectPeersScreenSharing);
 
 // Mute and unmute audio
