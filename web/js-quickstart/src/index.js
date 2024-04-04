@@ -9,6 +9,8 @@ import {
   selectIsLocalScreenShared,
   selectScreenShareByPeerID,
   selectPeersScreenSharing,
+  selectPeerNameByID,
+  selectLocalPeerID,
 } from "@100mslive/hms-video-store";
 
 // Initialize HMS Store
@@ -30,7 +32,8 @@ const controls = document.getElementById("controls");
 
 // store peer IDs already rendered to avoid re-render on mute/unmute
 const renderedPeerIDs = new Set();
-const renderedScreenshareIDs = new Set();
+// Maintain a mapping from peer IDs to their corresponding screenshare track IDs
+const renderedScreenshareIDs = new Map();
 
 // Joining the room
 joinBtn.onclick = async () => {
@@ -72,7 +75,7 @@ async function renderPeer(peer) {
   videoElement.autoplay = true;
   videoElement.muted = true;
   videoElement.playsinline = true;
-  peerTileName.textContent = peer.name;
+  peerTileName.textContent = peer.name + (peer.isLocal ? " (You)" : "");
   peerTileDiv.append(videoElement);
   peerTileDiv.append(peerTileName);
   peerTileDiv.append(peerAudioMuted);
@@ -95,18 +98,22 @@ async function renderPeer(peer) {
   return peerTileDiv;
 }
 
-async function renderScreenshare(screenshareID) {
-  renderedScreenshareIDs.add(screenshareID);
+async function renderScreenshare(screenshareID, peerID) {
+  const localPeerID = hmsStore.getState(selectLocalPeerID);
+  renderedScreenshareIDs.set(peerID, screenshareID);
+  const peerName = hmsStore.getState(selectPeerNameByID(peerID));
   const screenshareTileDiv = createElementWithClass("div", "peer-tile");
   const screenshareTileName = createElementWithClass("div", "peer-name");
   const videoElement = createElementWithClass("video", "peer-video");
   videoElement.autoplay = true;
   videoElement.muted = true;
   videoElement.playsinline = true;
-  screenshareTileName.textContent = "screenshare";
+  screenshareTileName.textContent = `Shared by ${
+    localPeerID === peerID ? "you" : peerName
+  }`;
   screenshareTileDiv.append(videoElement);
   screenshareTileDiv.append(screenshareTileName);
-  screenshareTileDiv.id = `screen-share-tile-${screenshareID}`;
+  screenshareTileDiv.id = `screen-share-tile-${peerID}`;
   await hmsActions.attachVideo(screenshareID, videoElement);
   return screenshareTileDiv;
 }
@@ -133,26 +140,26 @@ function renderPeers(peers) {
 hmsStore.subscribe(renderPeers, selectPeers);
 
 hmsStore.subscribe((screensharingPeers) => {
-  const currentScreenShareIDs = new Set();
+  const currentScreenShareIDs = new Map();
   screensharingPeers.forEach((peer) => {
     const screenshareID = hmsStore.getState(
       selectScreenShareByPeerID(peer.id)
     ).id;
-    currentScreenShareIDs.add(screenshareID);
+    currentScreenShareIDs.set(peer.id, screenshareID);
   });
 
   // Remove screenshare tiles for peers who have stopped screensharing or left
-  renderedScreenshareIDs.forEach((renderedID) => {
-    if (!currentScreenShareIDs.has(renderedID)) {
-      document.getElementById(`screen-share-tile-${renderedID}`).remove();
-      renderedScreenshareIDs.delete(renderedID);
+  renderedScreenshareIDs.forEach((_, peerID) => {
+    if (!currentScreenShareIDs.has(peerID)) {
+      document.getElementById(`screen-share-tile-${peerID}`).remove();
+      renderedScreenshareIDs.delete(peerID);
     }
   });
 
-  currentScreenShareIDs.forEach(async (screenshareID) => {
-    if (!renderedScreenshareIDs.has(screenshareID)) {
+  currentScreenShareIDs.forEach(async (screenshareID, peerID) => {
+    if (!renderedScreenshareIDs.has(peerID)) {
       if (screenshareID)
-        peersContainer.append(await renderScreenshare(screenshareID));
+        peersContainer.append(await renderScreenshare(screenshareID, peerID));
     }
   });
 }, selectPeersScreenSharing);
