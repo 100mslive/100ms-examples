@@ -1,17 +1,22 @@
 import JoinForm from "./JoinForm";
-import Header from "./Header";
 import "./styles.css";
 import Conference from "./Conference";
 import { useEffect } from "react";
 import {
+  HMSRoomState,
   selectIsConnectedToRoom,
+  selectRoomState,
   useHMSActions,
-  useHMSStore
+  useHMSStore,
 } from "@100mslive/react-sdk";
 import Footer from "./Footer";
+import { Loader } from "./Loader";
+
+const loadingStates = [HMSRoomState.Connecting, HMSRoomState.Disconnecting];
 
 export default function App() {
   const isConnected = useHMSStore(selectIsConnectedToRoom);
+  const roomState = useHMSStore(selectRoomState);
   const hmsActions = useHMSActions();
 
   useEffect(() => {
@@ -22,9 +27,12 @@ export default function App() {
     };
   }, [hmsActions, isConnected]);
 
+  if (loadingStates.includes(roomState) || !roomState) {
+    return <Loader />;
+  }
+
   return (
     <div className="App">
-      <Header />
       {isConnected ? (
         <>
           <Conference />
