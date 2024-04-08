@@ -11,6 +11,7 @@ import {
 } from "@100mslive/react-sdk";
 import Footer from "./Footer";
 import { Loader } from "./Loader";
+import Header from "./Header";
 
 const loadingStates = [HMSRoomState.Connecting, HMSRoomState.Disconnecting];
 
@@ -35,6 +36,7 @@ export default function App() {
     <div className="App">
       {isConnected ? (
         <>
+          <Header />
           <Conference />
           <Footer />
         </>

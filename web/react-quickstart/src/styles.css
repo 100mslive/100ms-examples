@@ -19,9 +19,16 @@
     color: #EFF0FA;
     margin-bottom: 0.5rem;
   }
+
+  .App {
+    height: 100vh;
+  }
   
   header {
-    padding: 10px;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    padding: 24px;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -56,38 +63,35 @@
     align-items: baseline;
     gap: 5px;
   }
-  
-  .btn-primary {
+
+  .btn {
     border: 1px solid transparent;
     display: flex;
     align-items: center;
     border-radius: 8px;
     padding: 8px 16px;
-    background-color: #2572ED;
     font-weight: 500;
     height: 48px;
     box-sizing: border-box;
+    font-size: 15px;
     color: white;
-    font-family: inherit;
-    font-size: 14px;
     cursor: pointer;
+  }
+  
+  .btn-primary {
+    background-color: #2572ED;
   }
   
   
   .btn-danger {
-    border: 1px solid transparent;
-    border-radius: 4px;
-    padding: 6px 14px;
-    background-color: #f44336;
-    color: white;
-    font-family: inherit;
-    font-size: 14px;
-    cursor: pointer;
+    padding: 8px;
+    background-color:#C74E5B;
   }
   
   .conference-section {
     padding: 20px 30px;
-    max-width: 960px;
+    max-width: 1000px;
+    height: 100%;
     margin: 0 auto;
   }
   
@@ -99,18 +103,32 @@
   }
   
   .peers-container {
-    display: grid;
-    grid-template-columns: repeat(3, minmax(min-content, 1fr));
-    place-items: center;
-    grid-gap: 10px;
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+    max-width: 1000px;
+    height: 100%;
+    justify-content: center;
+    align-items: center;
   }
   
   .peer-video {
     height: 250px;
-    width: 250px;
-    border-radius: 40%;
+    width: 450px;
+    border-radius: 0.5rem;
     object-fit: cover;
-    margin-bottom: 10px;
+    margin: 10px;
+    border: 1px solid #191B23;
+  }
+
+  .video-cover {
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-color: #191B23;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
   
   .local.peer-video {
@@ -123,7 +141,7 @@
   }
   
   .peer-container {
-    padding: 10px;
+    position: relative;
   }
   
   .control-bar {
@@ -144,13 +162,12 @@
     font-size: 12px;
     text-transform: uppercase;
     letter-spacing: 1px;
-    border: 2px solid #37474f;
-    width: 64px;
-    height: 64px;
+    border: 1px solid #37474f;
+    width: 56px;
+    height: 56px;
     border-radius: 50%;
     text-align: center;
-    background-color: #607d8b;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
+    background: none;
     color: white;
     cursor: pointer;
   }
@@ -175,4 +192,8 @@
 
   .center {
     align-items: center;
+  }
+
+  .highlight {
+    background: #2E3038;
   }

@@ -1,30 +1,24 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { useHMSActions } from "@100mslive/react-sdk";
 import { ArrowRightIcon } from "@100mslive/react-icons";
 
 function Join() {
   const hmsActions = useHMSActions();
-  const [inputValues, setInputValues] = useState({
-    name: "",
-    token: "",
-  });
-
-  const handleInputChange = (e) => {
-    setInputValues((prevValues) => ({
-      ...prevValues,
-      [e.target.name]: e.target.value,
-    }));
-  };
+  const roomCodeRef = useRef(null);
+  const userNameRef = useRef(null);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const { userName = "", roomCode = "" } = inputValues;
-
     // use room code to fetch auth token
-    const authToken = await hmsActions.getAuthTokenByRoomCode({ roomCode });
+    const authToken = await hmsActions.getAuthTokenByRoomCode({
+      roomCode: roomCodeRef.current?.value,
+    });
 
     try {
-      await hmsActions.join({ userName, authToken });
+      await hmsActions.join({
+        userName: userNameRef.current?.value,
+        authToken,
+      });
     } catch (e) {
       console.error(e);
     }
@@ -44,25 +38,24 @@ function Join() {
       <form onSubmit={handleSubmit}>
         <div className="input-container">
           <input
+            ref={roomCodeRef}
             id="room-code"
             type="text"
             name="roomCode"
             placeholder="Your Room Code"
-            onChange={handleInputChange}
           />
         </div>
         <div className="input-container">
           <input
             required
-            value={inputValues.name}
-            onChange={handleInputChange}
+            ref={userNameRef}
             id="name"
             type="text"
             name="name"
             placeholder="Your Name"
           />
         </div>
-        <button className="btn-primary">
+        <button className="btn btn-primary">
           Join Now
           <ArrowRightIcon
             height={16}
