@@ -22,6 +22,8 @@ const hmsActions = hmsManager.getActions();
 // HTML elements
 const form = document.getElementById("join");
 const joinBtn = document.getElementById("join-btn");
+const joinBtnContent = joinBtn.innerHTML;
+const header = document.getElementsByTagName("header")[0];
 const conference = document.getElementById("conference");
 const peersContainer = document.getElementById("peers-container");
 const leaveBtn = document.getElementById("leave-btn");
@@ -37,6 +39,8 @@ const renderedScreenshareIDs = new Map();
 
 // Joining the room
 joinBtn.onclick = async () => {
+  joinBtn.innerHTML = `Joining...`;
+  joinBtn.style.opacity = 0.8;
   const userName = document.getElementById("name").value;
   const roomCode = document.getElementById("room-code").value;
   // use room code to fetch auth token
@@ -89,8 +93,8 @@ async function renderPeer(peer) {
   }, selectIsPeerAudioEnabled(peer.id));
   hmsStore.subscribe((enabled) => {
     peerVideoMuted.style.display = enabled ? "none" : "flex";
-    peerVideoMuted.innerHTML = `<span class="material-symbols-outlined">
-         ${enabled ? "videocam" : "videocam_off"}
+    peerVideoMuted.innerHTML = `<span class="material-symbols-outlined video-status">
+         ${enabled ? "videocam" : "account_circle"}
       </span>
     `;
   }, selectIsPeerVideoEnabled(peer.id));
@@ -168,6 +172,7 @@ hmsStore.subscribe((screensharingPeers) => {
 muteAudio.onclick = () => {
   const audioEnabled = !hmsStore.getState(selectIsLocalAudioEnabled);
   hmsActions.setLocalAudioEnabled(audioEnabled);
+  muteAudio.classList.toggle("highlight");
   muteAudio.innerHTML = `<span class="material-symbols-outlined">
          ${audioEnabled ? "mic" : "mic_off"}
       </span>
@@ -178,6 +183,7 @@ muteAudio.onclick = () => {
 muteVideo.onclick = () => {
   const videoEnabled = !hmsStore.getState(selectIsLocalVideoEnabled);
   hmsActions.setLocalVideoEnabled(videoEnabled);
+  muteVideo.classList.toggle("highlight");
   muteVideo.innerHTML = `<span class="material-symbols-outlined">
          ${videoEnabled ? "videocam" : "videocam_off"}
       </span>
@@ -188,6 +194,7 @@ muteVideo.onclick = () => {
 toggleScreenshare.onclick = async () => {
   const isLocalScreenshared = hmsStore.getState(selectIsLocalScreenShared);
   await hmsActions.setScreenShareEnabled(!isLocalScreenshared);
+  toggleScreenshare.classList.toggle("highlight");
   toggleScreenshare.innerHTML = `<span class="material-symbols-outlined">
          ${isLocalScreenshared ? "screen_share" : "stop_screen_share"}
       </span>
@@ -198,11 +205,15 @@ toggleScreenshare.onclick = async () => {
 function onConnection(isConnected) {
   if (isConnected) {
     form.classList.add("hide");
+    joinBtn.innerHTML = joinBtnContent;
+    joinBtn.style.opacity = 1;
+    header.classList.remove("hide");
     conference.classList.remove("hide");
     leaveBtn.classList.remove("hide");
     controls.classList.remove("hide");
   } else {
     form.classList.remove("hide");
+    header.classList.add("hide");
     conference.classList.add("hide");
     leaveBtn.classList.add("hide");
     controls.classList.add("hide");
