@@ -55,7 +55,7 @@ function Join() {
             placeholder="Your Name"
           />
         </div>
-        <button className="btn btn-primary">
+        <button className="btn btn-primary" style={{ margin: "0 auto" }}>
           Join Now
           <ArrowRightIcon
             height={16}
