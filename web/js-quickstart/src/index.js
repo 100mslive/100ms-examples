@@ -203,20 +203,15 @@ toggleScreenshare.onclick = async () => {
 
 // Showing the required elements on connection/disconnection
 function onConnection(isConnected) {
+  const roomElements = [header, conference, controls, leaveBtn];
   if (isConnected) {
     form.classList.add("hide");
     joinBtn.innerHTML = joinBtnContent;
     joinBtn.style.opacity = 1;
-    header.classList.remove("hide");
-    conference.classList.remove("hide");
-    leaveBtn.classList.remove("hide");
-    controls.classList.remove("hide");
+    roomElements.forEach((element) => element.classList.remove("hide"));
   } else {
     form.classList.remove("hide");
-    header.classList.add("hide");
-    conference.classList.add("hide");
-    leaveBtn.classList.add("hide");
-    controls.classList.add("hide");
+    roomElements.forEach((element) => element.classList.add("hide"));
   }
 }
 

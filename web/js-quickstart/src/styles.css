@@ -189,6 +189,7 @@
     text-align: center;
     background-color: transparent;
     color: white;
+    cursor: pointer;
   }
 
   .highlight {
