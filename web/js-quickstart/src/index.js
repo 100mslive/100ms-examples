@@ -11,13 +11,16 @@ import {
   selectPeersScreenSharing,
   selectPeerNameByID,
   selectLocalPeerID,
+  selectIsLocalAudioPluginPresent,
 } from "@100mslive/hms-video-store";
+import { HMSKrispPlugin } from "@100mslive/hms-noise-cancellation";
 
 // Initialize HMS Store
 const hmsManager = new HMSReactiveStore();
 hmsManager.triggerOnSubscribe();
 const hmsStore = hmsManager.getStore();
 const hmsActions = hmsManager.getActions();
+const plugin = new HMSKrispPlugin();
 
 // HTML elements
 const form = document.getElementById("join");
@@ -30,6 +33,7 @@ const leaveBtn = document.getElementById("leave-btn");
 const muteAudio = document.getElementById("mute-aud");
 const muteVideo = document.getElementById("mute-vid");
 const toggleScreenshare = document.getElementById("toggle-screenshare");
+const toggleNC = document.getElementById("toggle-nc");
 const controls = document.getElementById("controls");
 
 // store peer IDs already rendered to avoid re-render on mute/unmute
@@ -49,7 +53,7 @@ joinBtn.onclick = async () => {
   hmsActions.join({
     userName,
     authToken,
-  });
+  }).then;
 };
 
 // Leaving the room
@@ -58,6 +62,20 @@ async function leaveRoom() {
   peersContainer.innerHTML = "";
 }
 
+const toggleKrisp = async () => {
+  const isPluginAdded = hmsStore.getState(
+    selectIsLocalAudioPluginPresent(plugin.getName()),
+  );
+
+  if (isPluginAdded) {
+    plugin.toggle();
+  } else {
+    await hmsActions.addPluginToAudioTrack(plugin);
+  }
+
+  toggleNC.classList.toggle("highlight");
+};
+toggleNC.onclick = toggleKrisp;
 // Cleanup if user refreshes the tab or navigates away
 window.onunload = window.onbeforeunload = leaveRoom;
 leaveBtn.onclick = leaveRoom;
@@ -147,7 +165,7 @@ hmsStore.subscribe((screensharingPeers) => {
   const currentScreenShareIDs = new Map();
   screensharingPeers.forEach((peer) => {
     const screenshareID = hmsStore.getState(
-      selectScreenShareByPeerID(peer.id)
+      selectScreenShareByPeerID(peer.id),
     ).id;
     currentScreenShareIDs.set(peer.id, screenshareID);
   });

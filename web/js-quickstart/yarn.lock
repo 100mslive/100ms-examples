@@ -2,10 +2,15 @@
 # yarn lockfile v1
 
 
-"@100mslive/hms-video-store@0.12.2":
-  version "0.12.2"
-  resolved "https://registry.yarnpkg.com/@100mslive/hms-video-store/-/hms-video-store-0.12.2.tgz#100aefc390035d4048e5a377ff5c731a3a6b04b8"
-  integrity sha512-/q2tn66Aqzu8Nju8rw7no9Lmz/VyARmS9icRB1BII3YEzBc1xM20TtHuBp1L+qhUaikTGaToci8KpaQ19gBTbg==
+"@100mslive/hms-noise-cancellation@^0.0.1":
+  version "0.0.1"
+  resolved "https://registry.yarnpkg.com/@100mslive/hms-noise-cancellation/-/hms-noise-cancellation-0.0.1.tgz#037c8bdfb6b2d7bf12f9d257422150fe6ca43acb"
+  integrity sha512-DGnzcXRDJREWypIjGX70er+f2k/XLLRF41lrXPs1+PtB1imdEkECPPS0Fg4BA0BCWKDNAGTZBHZPrBDgUmr9Lw==
+
+"@100mslive/hms-video-store@0.11.7":
+  version "0.11.7"
+  resolved "https://registry.yarnpkg.com/@100mslive/hms-video-store/-/hms-video-store-0.11.7.tgz#785fa59e34da121289101099c1ecf1a0a0bfad77"
+  integrity sha512-aEVCYGlsv2T1gjktqpxcUR8T7ePjAyYFrl1mTqA2PQemII5RIK0QmECOH6y5zXbNOGdfEeHCeZdr4wFZJzwt+A==
   dependencies:
     eventemitter2 "^6.4.9"
     immer "^9.0.6"
@@ -1545,9 +1550,9 @@ caniuse-api@^3.0.0:
     lodash.uniq "^4.5.0"
 
 caniuse-lite@^1.0.0, caniuse-lite@^1.0.30001449:
-  version "1.0.30001468"
-  resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30001468.tgz#0101837c6a4e38e6331104c33dcfb3bdf367a4b7"
-  integrity sha512-zgAo8D5kbOyUcRAgSmgyuvBkjrGk5CGYG5TYgFdpQv+ywcyEpo1LOWoG8YmoflGnh+V+UsNuKYedsoYs0hzV5A==
+  version "1.0.30001610"
+  resolved "https://registry.npmjs.org/caniuse-lite/-/caniuse-lite-1.0.30001610.tgz"
+  integrity sha512-QFutAY4NgaelojVMjY63o6XlZyORPaLfyMnsl3HgnWdJUcX6K0oaJymHjH8PT5Gk7sTm8rvC/c5COUQKXqmOMA==
 
 caseless@~0.12.0:
   version "0.12.0"
