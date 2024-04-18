@@ -53,7 +53,7 @@ joinBtn.onclick = async () => {
   hmsActions.join({
     userName,
     authToken,
-  });
+  }).then;
 };
 
 // Leaving the room
@@ -64,7 +64,7 @@ async function leaveRoom() {
 
 const toggleKrisp = async () => {
   const isPluginAdded = hmsStore.getState(
-    selectIsLocalAudioPluginPresent(plugin.getName())
+    selectIsLocalAudioPluginPresent(plugin.getName()),
   );
 
   if (isPluginAdded) {
@@ -165,7 +165,7 @@ hmsStore.subscribe((screensharingPeers) => {
   const currentScreenShareIDs = new Map();
   screensharingPeers.forEach((peer) => {
     const screenshareID = hmsStore.getState(
-      selectScreenShareByPeerID(peer.id)
+      selectScreenShareByPeerID(peer.id),
     ).id;
     currentScreenShareIDs.set(peer.id, screenshareID);
   });
