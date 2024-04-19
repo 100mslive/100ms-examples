@@ -10,6 +10,7 @@ function Peer({ peer }) {
   const { videoRef } = useVideo({
     trackId: peer.videoTrack,
   });
+
   const isPeerAudioEnabled = useHMSStore(selectIsPeerAudioEnabled(peer.id));
   const isPeerVideoEnabled = useHMSStore(selectIsPeerVideoEnabled(peer.id));
 

@@ -47,7 +47,7 @@ function Footer() {
       <button
         title="Screenshare"
         className={`btn-control ${amIScreenSharing ? "" : "highlight"}`}
-        onClick={toggleVideo}
+        onClick={() => actions.setScreenShareEnabled(!amIScreenSharing)}
       >
         <ShareScreenIcon />
       </button>
