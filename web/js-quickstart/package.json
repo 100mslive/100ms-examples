@@ -4,19 +4,21 @@
     "description": "100ms js quickstart",
     "main": "index.html",
     "scripts": {
-        "start": "parcel index.html --open",
-        "build": "parcel build index.html"
+      "start": "parcel index.html --open",
+      "build": "parcel build index.html"
     },
     "dependencies": {
-        "@100mslive/hms-video-store": "0.10.0",
-        "parcel-bundler": "^1.6.1"
+      "@100mslive/hms-noise-cancellation": "^0.0.1",
+      "@100mslive/hms-video-store": "0.11.7",
+      "parcel-bundler": "^1.6.1"
     },
     "devDependencies": {
-        "@babel/core": "7.2.0"
+      "@babel/core": "7.2.0"
     },
     "resolutions": {
-        "@babel/preset-env": "7.13.8"
+      "@babel/preset-env": "7.13.8"
     },
     "keywords": [],
     "author": "100ms inc"
-}
+  }
+  

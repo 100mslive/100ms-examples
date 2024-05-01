@@ -2,27 +2,25 @@
 # yarn lockfile v1
 
 
-"@100mslive/hms-video-store@^0.10.0":
-  version "0.10.0"
-  resolved "https://registry.yarnpkg.com/@100mslive/hms-video-store/-/hms-video-store-0.10.0.tgz#2702f1f8a54d7aed7ed6f5fe3ae4addc229c7a7c"
-  integrity sha512-jpEr7CT0xYPtJLSW69ONmwCK+Zo2oQ7zTwgKx+kRxGoA4QEfbB6k0xjUdLsjG0heUjaiwJBWIwnKUCzD3FLYdA==
-  dependencies:
-    "@100mslive/hms-video" "0.9.0"
-    eventemitter2 "^6.4.7"
-    immer "^9.0.6"
-    reselect "4.0.0"
-    zustand "3.5.7"
+"@100mslive/hms-noise-cancellation@^0.0.1":
+  version "0.0.1"
+  resolved "https://registry.yarnpkg.com/@100mslive/hms-noise-cancellation/-/hms-noise-cancellation-0.0.1.tgz#037c8bdfb6b2d7bf12f9d257422150fe6ca43acb"
+  integrity sha512-DGnzcXRDJREWypIjGX70er+f2k/XLLRF41lrXPs1+PtB1imdEkECPPS0Fg4BA0BCWKDNAGTZBHZPrBDgUmr9Lw==
 
-"@100mslive/hms-video@0.9.0":
-  version "0.9.0"
-  resolved "https://registry.yarnpkg.com/@100mslive/hms-video/-/hms-video-0.9.0.tgz#b42b87db13daadbd57d7ab871b147faea504264e"
-  integrity sha512-l8wx2bkQtOuAUN+I7ygLPrhpjsU+kQgTtB1y1lVS/Ai5MRHpg6YWZt7S7AmKLt+fpD6sFD+kNoK9x7dAGByWhw==
+"@100mslive/hms-video-store@0.11.7":
+  version "0.11.7"
+  resolved "https://registry.yarnpkg.com/@100mslive/hms-video-store/-/hms-video-store-0.11.7.tgz#785fa59e34da121289101099c1ecf1a0a0bfad77"
+  integrity sha512-aEVCYGlsv2T1gjktqpxcUR8T7ePjAyYFrl1mTqA2PQemII5RIK0QmECOH6y5zXbNOGdfEeHCeZdr4wFZJzwt+A==
   dependencies:
-    eventemitter2 "^6.4.7"
+    eventemitter2 "^6.4.9"
+    immer "^9.0.6"
+    lodash.isequal "^4.5.0"
+    reselect "4.0.0"
     sdp-transform "^2.14.1"
     ua-parser-js "^1.0.1"
     uuid "^8.3.2"
     webrtc-adapter "^8.0.0"
+    zustand "3.5.7"
 
 "@ampproject/remapping@^2.2.0":
   version "2.2.0"
@@ -1552,9 +1550,9 @@ caniuse-api@^3.0.0:
     lodash.uniq "^4.5.0"
 
 caniuse-lite@^1.0.0, caniuse-lite@^1.0.30001449:
-  version "1.0.30001468"
-  resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30001468.tgz#0101837c6a4e38e6331104c33dcfb3bdf367a4b7"
-  integrity sha512-zgAo8D5kbOyUcRAgSmgyuvBkjrGk5CGYG5TYgFdpQv+ywcyEpo1LOWoG8YmoflGnh+V+UsNuKYedsoYs0hzV5A==
+  version "1.0.30001610"
+  resolved "https://registry.npmjs.org/caniuse-lite/-/caniuse-lite-1.0.30001610.tgz"
+  integrity sha512-QFutAY4NgaelojVMjY63o6XlZyORPaLfyMnsl3HgnWdJUcX6K0oaJymHjH8PT5Gk7sTm8rvC/c5COUQKXqmOMA==
 
 caseless@~0.12.0:
   version "0.12.0"
@@ -2400,7 +2398,7 @@ etag@~1.8.1:
   resolved "https://registry.yarnpkg.com/etag/-/etag-1.8.1.tgz#41ae2eeb65efa62268aebfea83ac7d79299b0887"
   integrity sha512-aIL5Fx7mawVa300al2BnEE4iNvo1qETxLrPI/o05L7z6go7fCw1J6EQmbK4FmJ2AS7kgVF/KEZWufBfdClMcPg==
 
-eventemitter2@^6.4.7:
+eventemitter2@^6.4.9:
   version "6.4.9"
   resolved "https://registry.yarnpkg.com/eventemitter2/-/eventemitter2-6.4.9.tgz#41f2750781b4230ed58827bc119d293471ecb125"
   integrity sha512-JEPTiaOt9f04oa6NOkc4aH+nVp5I3wEjpHbIPqfgCdD5v5bUzy7xQqwcVO2aDQgOWhI28da57HksMrzK9HlRxg==
@@ -3435,6 +3433,11 @@ lodash.debounce@^4.0.8:
   version "4.0.8"
   resolved "https://registry.yarnpkg.com/lodash.debounce/-/lodash.debounce-4.0.8.tgz#82d79bff30a67c4005ffd5e2515300ad9ca4d7af"
   integrity sha512-FT1yDzDYEoYWhnSGnpE/4Kj1fLZkDFyqRb7fNt6FdYOSxlUWAtp42Eh6Wb0rGIv/m9Bgo7x4GhQbm5Ys4SG5ow==
+
+lodash.isequal@^4.5.0:
+  version "4.5.0"
+  resolved "https://registry.yarnpkg.com/lodash.isequal/-/lodash.isequal-4.5.0.tgz#415c4478f2bcc30120c22ce10ed3226f7d3e18e0"
+  integrity sha512-pDo3lu8Jhfjqls6GkMgpahsF9kCyayhgykjyLMNFTKWrpVdAQtYyB4muAMWozBB4ig/dtWAmsMxLEI8wuz+DYQ==
 
 lodash.memoize@^4.1.2:
   version "4.1.2"
