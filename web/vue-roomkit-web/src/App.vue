@@ -5,7 +5,7 @@
       id="room-code-field"
       v-model="roomCode"
       type="text"
-      placeholder="Enter room code"
+      placeholder="Enter a room code"
     />
     <button id="btn" @click="renderHmsPrebuilt">Submit</button>
   </div>
@@ -30,6 +30,10 @@ export default {
       this.showHmsPrebuilt = true;
       this.showInputForm = false;
     },
+    resetPage() {
+      this.showHmsPrebuilt = false;
+      this.showInputForm = true;
+    },
   },
 };
 </script>
@@ -37,6 +41,7 @@ export default {
 <style>
 body {
   font-family: sans-serif;
+  margin: 0;
 }
 
 #form {
