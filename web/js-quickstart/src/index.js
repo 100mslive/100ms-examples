@@ -55,8 +55,8 @@ previewBtn.onclick = async () => {
   const authToken = await hmsActions.getAuthTokenByRoomCode({ roomCode });
   const config = { userName, authToken };
   await hmsActions.preview(config);
-  const effectsKey = hmsStore.getState().room;
-  effectsPlugin = new HMSEffectsPlugin(effectsKey.effectsKey, () => {
+  const { effectsKey } = hmsStore.getState().room;
+  effectsPlugin = new HMSEffectsPlugin(effectsKey, () => {
     setTimeout(async () => {
       await hmsActions.join(config);
     });
