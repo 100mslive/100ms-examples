@@ -1,24 +1,19 @@
 {
-    "name": "js-quickstart",
-    "version": "1.0.0",
-    "description": "100ms js quickstart",
-    "main": "index.html",
-    "scripts": {
-      "start": "parcel index.html --open",
-      "build": "parcel build index.html"
-    },
-    "dependencies": {
-      "@100mslive/hms-noise-cancellation": "^0.0.1",
-      "@100mslive/hms-video-store": "0.11.7",
-      "parcel-bundler": "^1.6.1"
-    },
-    "devDependencies": {
-      "@babel/core": "7.2.0"
-    },
-    "resolutions": {
-      "@babel/preset-env": "7.13.8"
-    },
-    "keywords": [],
-    "author": "100ms inc"
+  "name": "vite-starter",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "devDependencies": {
+    "vite": "^5.2.11"
+  },
+  "dependencies": {
+    "@100mslive/hms-noise-cancellation": "^0.0.1",
+    "@100mslive/hms-video-store": "^0.12.13",
+    "@100mslive/hms-virtual-background": "^1.13.13"
   }
-  
+}

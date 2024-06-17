@@ -36,16 +36,17 @@
       <button
         type="button"
         class="btn btn-primary"
-        id="join-btn"
+        id="preview-btn"
         style="margin: 0 auto"
       >
-        Join Now <span class="material-symbols-outlined">arrow_forward</span>
+        Proceed <span class="material-symbols-outlined">arrow_forward</span>
       </button>
     </form>
 
     <div id="conference" class="conference-section hide">
       <div id="peers-container"></div>
     </div>
+    <h3 id="loader" class="hide">Joining...</h3>
 
     <div id="controls" class="control-bar hide">
       <button id="mute-aud" class="btn-control">
@@ -54,10 +55,18 @@
       <button id="mute-vid" class="btn-control">
         <span class="material-symbols-outlined"> videocam </span>
       </button>
-      <button title="Screenshare" id="toggle-screenshare" class="btn-control highlight">
+      <button
+        title="Screenshare"
+        id="toggle-screenshare"
+        class="btn-control highlight"
+      >
         <span class="material-symbols-outlined"> screen_share </span>
       </button>
-      <button title="Noise cancellation" id="toggle-nc" class="btn-control highlight">
+      <button
+        title="Noise cancellation"
+        id="toggle-nc"
+        class="btn-control highlight"
+      >
         <span class="material-symbols-outlined"> graphic_eq </span>
       </button>
     </div>

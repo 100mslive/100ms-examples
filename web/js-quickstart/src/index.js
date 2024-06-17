@@ -3,7 +3,6 @@ import {
   selectIsLocalAudioEnabled,
   selectIsLocalVideoEnabled,
   selectPeers,
-  selectIsConnectedToRoom,
   selectIsPeerAudioEnabled,
   selectIsPeerVideoEnabled,
   selectIsLocalScreenShared,
@@ -12,7 +11,10 @@ import {
   selectPeerNameByID,
   selectLocalPeerID,
   selectIsLocalAudioPluginPresent,
+  selectRoomState,
+  HMSRoomState,
 } from "@100mslive/hms-video-store";
+import { HMSEffectsPlugin } from "@100mslive/hms-virtual-background";
 import { HMSKrispPlugin } from "@100mslive/hms-noise-cancellation";
 
 // Initialize HMS Store
@@ -21,11 +23,13 @@ hmsManager.triggerOnSubscribe();
 const hmsStore = hmsManager.getStore();
 const hmsActions = hmsManager.getActions();
 const plugin = new HMSKrispPlugin();
+let effectsPlugin;
 
 // HTML elements
 const form = document.getElementById("join");
+const previewBtn = document.getElementById("preview-btn");
+const previewBtnContent = previewBtn.innerHTML;
 const joinBtn = document.getElementById("join-btn");
-const joinBtnContent = joinBtn.innerHTML;
 const header = document.getElementsByTagName("header")[0];
 const conference = document.getElementById("conference");
 const peersContainer = document.getElementById("peers-container");
@@ -41,19 +45,26 @@ const renderedPeerIDs = new Set();
 // Maintain a mapping from peer IDs to their corresponding screenshare track IDs
 const renderedScreenshareIDs = new Map();
 
-// Joining the room
-joinBtn.onclick = async () => {
-  joinBtn.innerHTML = `Joining...`;
-  joinBtn.style.opacity = 0.8;
+// Joining the preview
+previewBtn.onclick = async () => {
+  previewBtn.innerHTML = `Loading preview...`;
+  previewBtn.style.opacity = 0.8;
   const userName = document.getElementById("name").value;
   const roomCode = document.getElementById("room-code").value;
   // use room code to fetch auth token
   const authToken = await hmsActions.getAuthTokenByRoomCode({ roomCode });
-  // join room using username and auth token
-  hmsActions.join({
-    userName,
-    authToken,
+  const config = { userName, authToken };
+  await hmsActions.preview(config);
+  const { effectsKey } = hmsStore.getState().room;
+  effectsPlugin = new HMSEffectsPlugin(effectsKey, () => {
+    setTimeout(async () => {
+      await hmsActions.join(config);
+    });
   });
+  effectsPlugin.setBackground(
+    "https://images.unsplash.com/photo-1715954410040-37496c8aa689?q=80&w=3002&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+  );
+  await hmsActions.addPluginsToVideoStream([effectsPlugin]);
 };
 
 // Leaving the room
@@ -146,7 +157,7 @@ function renderPeers(peers) {
   // remove peers that are not present
   renderedPeerIDs.forEach((peerId) => {
     if (!currentPeerIds.has(peerId)) {
-      document.getElementById(`peer-tile-${peerId}`).remove();
+      document.getElementById(`peer-tile-${peerId}`)?.remove();
     }
   });
 
@@ -220,18 +231,28 @@ toggleScreenshare.onclick = async () => {
 };
 
 // Showing the required elements on connection/disconnection
-function onConnection(isConnected) {
+function onRoomStateChange(roomState) {
   const roomElements = [header, conference, controls, leaveBtn];
-  if (isConnected) {
+  const commonElements = [conference];
+  const previewElements = [loader];
+  if ([HMSRoomState.Preview, HMSRoomState.Connected].includes(roomState)) {
     form.classList.add("hide");
-    joinBtn.innerHTML = joinBtnContent;
-    joinBtn.style.opacity = 1;
-    roomElements.forEach((element) => element.classList.remove("hide"));
-  } else {
+    previewBtn.innerHTML = previewBtnContent;
+    previewBtn.style.opacity = 1;
+    if (roomState === HMSRoomState.Preview) {
+      previewElements.forEach((element) => element.classList.remove("hide"));
+      commonElements.forEach((element) => element.classList.remove("hide"));
+    } else {
+      previewElements.forEach((element) => element.classList.add("hide"));
+      roomElements.forEach((element) => element.classList.remove("hide"));
+      renderPeers(hmsStore.getState(selectPeers));
+    }
+  } else if (roomState !== HMSRoomState.Connecting) {
+    previewElements.forEach((element) => element.classList.add("hide"));
     form.classList.remove("hide");
     roomElements.forEach((element) => element.classList.add("hide"));
   }
 }
 
 // Listen to the connection state
-hmsStore.subscribe(onConnection, selectIsConnectedToRoom);
+hmsStore.subscribe(onRoomStateChange, selectRoomState);
