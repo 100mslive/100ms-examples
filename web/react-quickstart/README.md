@@ -1,16 +1,14 @@
-### Quickstart sample to 100ms in react
+# Vite + React
 
-- This is an example of building a Video Conferencing app in React with [100ms](https://100ms.live) SDK.
+This is a [Vite](https://vitejs.dev) project together with React.
 
-### Running
+[![Edit in CodeSandbox](https://assets.codesandbox.io/github/button-edit-lime.svg)](https://codesandbox.io/p/github/codesandbox/codesandbox-template-vite-react/main)
 
-- npm install
-- npm build
-- npm start
-- Go to http://localhost:3000
-- Follow further step to generate auth token, [Auth token guide](https://www.100ms.live/docs/javascript/v2/guides/token)
-- For more reference, [link](https://www.100ms.live/docs/javascript/v2/guides/react-quickstart)
+[Configuration](https://codesandbox.io/docs/projects/learn/setting-up/tasks) `.codesandbox/tasks.json` has been added to optimize it for [CodeSandbox](https://codesandbox.io/dashboard).
 
-### Fork from CodeSandbox
+## Resources
 
-- [</> Sandbox ](https://codesandbox.io/s/github/100mslive/100ms-examples/tree/main/web/react-quickstart)
+- [CodeSandbox — Docs](https://codesandbox.io/docs/learn)
+- [CodeSandbox — Discord](https://discord.gg/Ggarp3pX5H)
+- [Vite — GitHub](https://github.com/vitejs/vite)
+- [Vite — Docs](https://vitejs.dev/guide/)
