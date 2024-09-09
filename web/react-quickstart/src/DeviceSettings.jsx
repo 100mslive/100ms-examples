@@ -13,7 +13,7 @@ const DeviceSettings = () => {
         onChange={(e) =>
           updateDevice({
             deviceId: e.target.value,
-            deviceType: DeviceType.videoInput
+            deviceType: DeviceType.videoInput,
           })
         }
       />
@@ -24,7 +24,7 @@ const DeviceSettings = () => {
         onChange={(e) =>
           updateDevice({
             deviceId: e.target.value,
-            deviceType: DeviceType.audioInput
+            deviceType: DeviceType.audioInput,
           })
         }
       />
@@ -35,7 +35,7 @@ const DeviceSettings = () => {
         onChange={(e) =>
           updateDevice({
             deviceId: e.target.value,
-            deviceType: DeviceType.audioOutput
+            deviceType: DeviceType.audioOutput,
           })
         }
       />
