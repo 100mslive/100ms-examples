@@ -12,6 +12,7 @@ import {
   selectLocalPeerID,
   selectIsLocalAudioPluginPresent,
   selectRoomState,
+  selectVideoTrackByPeerID,
   HMSRoomState,
 } from "@100mslive/hms-video-store";
 import { HMSEffectsPlugin } from "@100mslive/hms-virtual-background";
@@ -127,7 +128,19 @@ async function renderPeer(peer) {
       </span>
     `;
   }, selectIsPeerVideoEnabled(peer.id));
-  await hmsActions.attachVideo(peer.videoTrack, videoElement);
+  // A peer's video track id is not fixed for the whole call - it changes when they
+  // switch camera, and when we move their session to another server. Subscribe by
+  // peer id so we always hold their current track, and re-attach when it changes.
+  // Attaching once to peer.videoTrack would leave the tile frozen after either.
+  let attachedTrackId = null;
+  hmsStore.subscribe(async (track) => {
+    const nextTrackId = track?.id ?? null;
+    if (nextTrackId === attachedTrackId) return; // same track, e.g. mute/unmute
+    if (attachedTrackId)
+      await hmsActions.detachVideo(attachedTrackId, videoElement);
+    if (nextTrackId) await hmsActions.attachVideo(nextTrackId, videoElement);
+    attachedTrackId = nextTrackId;
+  }, selectVideoTrackByPeerID(peer.id));
   return peerTileDiv;
 }
 
@@ -147,7 +160,17 @@ async function renderScreenshare(screenshareID, peerID) {
   screenshareTileDiv.append(videoElement);
   screenshareTileDiv.append(screenshareTileName);
   screenshareTileDiv.id = `screen-share-tile-${peerID}`;
-  await hmsActions.attachVideo(screenshareID, videoElement);
+  // Same as peer video: the screenshare track id can be replaced mid-call, so
+  // follow the peer's current screenshare track rather than attaching once.
+  let attachedTrackId = null;
+  hmsStore.subscribe(async (track) => {
+    const nextTrackId = track?.id ?? null;
+    if (nextTrackId === attachedTrackId) return;
+    if (attachedTrackId)
+      await hmsActions.detachVideo(attachedTrackId, videoElement);
+    if (nextTrackId) await hmsActions.attachVideo(nextTrackId, videoElement);
+    attachedTrackId = nextTrackId;
+  }, selectScreenShareByPeerID(peerID));
   return screenshareTileDiv;
 }
 
