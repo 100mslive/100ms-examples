@@ -12,8 +12,8 @@
     "vite": "^5.2.11"
   },
   "dependencies": {
-    "@100mslive/hms-noise-cancellation": "^0.0.1",
-    "@100mslive/hms-video-store": "^0.12.13",
-    "@100mslive/hms-virtual-background": "^1.13.13"
+    "@100mslive/hms-noise-cancellation": "^0.1.1",
+    "@100mslive/hms-video-store": "^0.14.7",
+    "@100mslive/hms-virtual-background": "^1.15.7"
   }
 }
