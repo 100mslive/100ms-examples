@@ -128,10 +128,10 @@ async function renderPeer(peer) {
       </span>
     `;
   }, selectIsPeerVideoEnabled(peer.id));
-  // A peer's video track id is not fixed for the whole call - it changes when they
-  // switch camera, and when we move their session to another server. Subscribe by
-  // peer id so we always hold their current track, and re-attach when it changes.
-  // Attaching once to peer.videoTrack would leave the tile frozen after either.
+  // A peer's video track id is not fixed for the whole call - it becomes a new id when
+  // their session is moved to another media server. Subscribe by peer id so we always
+  // hold their current track, and re-attach when it changes. Attaching once to
+  // peer.videoTrack would leave the tile frozen from that point on.
   let attachedTrackId = null;
   hmsStore.subscribe(async (track) => {
     const nextTrackId = track?.id ?? null;
